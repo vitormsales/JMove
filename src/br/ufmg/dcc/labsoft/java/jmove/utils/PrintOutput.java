@@ -15,7 +15,9 @@ public class PrintOutput {
 
 		try {
 			if (outuput == null) {
-				outputsMap.put(address, new PrintStream(new File(address)));
+				String home = System.getProperty("user.home");
+				outputsMap.put(address, new PrintStream(new File(home + "/"
+						+ address)));
 			}
 			outuput = outputsMap.get(address);
 		} catch (FileNotFoundException e) {

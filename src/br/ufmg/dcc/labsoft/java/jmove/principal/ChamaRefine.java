@@ -67,7 +67,7 @@ public class ChamaRefine {
 
 			allDeepDependency = new ArrayList<DeepDependencyVisitor>();
 
-			 activeProjectName = iProject.getElementName();
+			activeProjectName = iProject.getElementName();
 
 			project = ResourcesPlugin.getWorkspace().getRoot()
 					.getProject(activeProjectName);
@@ -80,7 +80,8 @@ public class ChamaRefine {
 						throws InvocationTargetException, InterruptedException {
 
 					try {
-						monitor.beginTask("Parsing selected Java Project (1/4)",
+						monitor.beginTask(
+								"Parsing selected Java Project (1/4)",
 								(DCLUtil.getClassNames(project)).size());
 
 						for (String className : DCLUtil.getClassNames(project)) {
@@ -156,7 +157,7 @@ public class ChamaRefine {
 						throws InvocationTargetException, InterruptedException {
 
 					try {
-					 allMethods = new AllMethods(allDeepDependency,monitor);
+						allMethods = new AllMethods(allDeepDependency, monitor);
 					} catch (JavaModelException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -164,31 +165,31 @@ public class ChamaRefine {
 				}
 			});
 
-//			System.out.println(" inciando AllMethods");
-//			AllMethods allMethods = new AllMethods(allDeepDependency);
-//			System.out.println(" Terminou AllMethods");
+			// System.out.println(" inciando AllMethods");
+			// AllMethods allMethods = new AllMethods(allDeepDependency);
+			// System.out.println(" Terminou AllMethods");
 
-			//List<MethodJMove> l = allMethods.getAllMethodsList();
-//			for (int i = 0; i < l.size(); i++) {
-//				boolean temApenas1 = true;
-//				MethodJMove m1 = l.get(i);
-//
-//				for (int j = 0; j < l.size(); j++) {
-//					MethodJMove m2 = l.get(j);
-//
-//					if (i != j
-//							&& m1.getSourceClassID() == m2.getSourceClassID())
-//						temApenas1 = false;
-//
-//				}
-//				if (temApenas1)
-//					PrintOutput.write(
-//							AllEntitiesMapping.getInstance().getByID(
-//									m1.getSourceClassID())
-//									+ "\n", "classes");
-//			}
-//
-//			PrintOutput.finish("classes");
+			// List<MethodJMove> l = allMethods.getAllMethodsList();
+			// for (int i = 0; i < l.size(); i++) {
+			// boolean temApenas1 = true;
+			// MethodJMove m1 = l.get(i);
+			//
+			// for (int j = 0; j < l.size(); j++) {
+			// MethodJMove m2 = l.get(j);
+			//
+			// if (i != j
+			// && m1.getSourceClassID() == m2.getSourceClassID())
+			// temApenas1 = false;
+			//
+			// }
+			// if (temApenas1)
+			// PrintOutput.write(
+			// AllEntitiesMapping.getInstance().getByID(
+			// m1.getSourceClassID())
+			// + "\n", "classes");
+			// }
+			//
+			// PrintOutput.finish("classes");
 
 			// FeatureEnvy.getInstance().sugestFeatureEnvyMoves(allMethods);
 			// for (Method method : allMethods.getAllMethodsList()) {
@@ -213,41 +214,42 @@ public class ChamaRefine {
 			// allMethods.getAllMethodsList());
 			// System.out.println("Terminou StatisticsMethod2Method");
 
-			
 			wb = PlatformUI.getWorkbench();
 			ps = wb.getProgressService();
 			ps.busyCursorWhile(new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor)
 						throws InvocationTargetException, InterruptedException {
 
-					
-						CalculateMediaApproach mediaApproach = new CalculateMediaApproach(
-								allMethods, activeProjectName, numberOfClass, monitor);
-						allMethods = null;
-						map = mediaApproach.calculate(CoefficientStrategy.SokalSneath2);
-						
-					
-					
+					CalculateMediaApproach mediaApproach = new CalculateMediaApproach(
+							allMethods, activeProjectName, numberOfClass,
+							monitor);
+					allMethods = null;
+					// map =
+					// mediaApproach.calculate(CoefficientStrategy.SokalSneath2);
+
+					mediaApproach.calculateForAllStrategies();
+
 				}
 			});
-			
-//			System.out.println("iniciando CalculateMediaApproach");
-//			
-//			CalculateMediaApproach mediaApproach = new CalculateMediaApproach(
-//					allMethods, activeProjectName, numberOfClass);
-//			
-//			System.out.println("Terminou CalculateMediaApproach");
-//
-//			// m2m = null;
-//			allMethods = null;
-//
-//			System.out.println("iniciando calculateForAllStrategies");
-//			map = mediaApproach.calculate(CoefficientStrategy.SokalSneath2);
-//			System.out.println("Terminou calculateForAllStrategies");
-//			System.out.println("Recebeu o valor de map " + map);
-//			// ########## Method2Method end
-//
-//			System.out.println("Fim");
+
+			// System.out.println("iniciando CalculateMediaApproach");
+			//
+			// CalculateMediaApproach mediaApproach = new
+			// CalculateMediaApproach(
+			// allMethods, activeProjectName, numberOfClass);
+			//
+			// System.out.println("Terminou CalculateMediaApproach");
+			//
+			// // m2m = null;
+			// allMethods = null;
+			//
+			// System.out.println("iniciando calculateForAllStrategies");
+			// map = mediaApproach.calculate(CoefficientStrategy.SokalSneath2);
+			// System.out.println("Terminou calculateForAllStrategies");
+			// System.out.println("Recebeu o valor de map " + map);
+			// // ########## Method2Method end
+			//
+			// System.out.println("Fim");
 
 			// Iterator<Entry<IMethod, ArrayList<String>>> it = CandidateMap
 			// .getInstance().getCandidatesRefine().entrySet().iterator();

@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.DoStatement;
@@ -22,26 +21,31 @@ import org.eclipse.jdt.core.dom.WhileStatement;
 
 import br.ufmg.dcc.labsoft.java.jmove.basic.AllEntitiesMapping;
 import br.ufmg.dcc.labsoft.java.jmove.basic.CoefficientsResolution;
-import br.ufmg.dcc.labsoft.java.jmove.basic.Parameters;
 import br.ufmg.dcc.labsoft.java.jmove.basic.CoefficientsResolution.CoefficientStrategy;
+import br.ufmg.dcc.labsoft.java.jmove.basic.Parameters;
 import br.ufmg.dcc.labsoft.java.jmove.methods.AllMethods;
 import br.ufmg.dcc.labsoft.java.jmove.methods.MethodJMove;
-import br.ufmg.dcc.labsoft.java.jmove.methods.MethodObjects;
 import br.ufmg.dcc.labsoft.java.jmove.methods.StatisticsMethod2Method;
 import br.ufmg.dcc.labsoft.java.jmove.utils.CandidateMap;
-import br.ufmg.dcc.labsoft.java.jmove.utils.ClazzUtil;
 import br.ufmg.dcc.labsoft.java.jmove.utils.MoveMethod;
 import br.ufmg.dcc.labsoft.java.jmove.utils.PrintOutput;
 
+/**
+ * @author vitor.sales
+ *
+ */
 public class CalculateMediaApproach {
 
+	private static final int MINIMUM_DEPEDENCIES_SIZE = 4;
 	final int indexCORRETA = 0;
 	final int indexSUGESTAO = 1;
 	final int indexERRADO = 3;
 	CandidateMap candidateMap;
 
-	private class ClassAtributes { // classe interna usada somente dentro da
-									// classe
+	/**
+	 * @author vitor.sales classe interna
+	 */
+	private class ClassAtributes {
 		int classID;
 		int numberOfMethods;
 		double similarityIndice;
@@ -170,7 +174,7 @@ public class CalculateMediaApproach {
 			MethodJMove sourceMethod = allMethods.getAllMethodsList().get(i);
 
 			// #### tira metodos pequenos
-			if (sourceMethod.getMethodsDependencies().size() < 4) {
+			if (sourceMethod.getMethodsDependencies().size() < MINIMUM_DEPEDENCIES_SIZE) {
 
 				String nameMethod = AllEntitiesMapping.getInstance().getByID(
 						sourceMethod.getNameID());
@@ -363,29 +367,29 @@ public class CalculateMediaApproach {
 
 	}
 
-	// private boolean checkPossibleSugestion(MethodRefine sourceMethod,
-	// List<ClassAtributes> allClassSimilarity, int posMax) {
-	// // TODO Auto-generated method stub
-	//
-	// ClassAtributes classOriginal = new ClassAtributes(
-	// sourceMethod.getSourceClassID());
-	//
-	// int MyPosition = allClassSimilarity.indexOf(classOriginal);
-	//
-	// if (MyPosition > posMax) {
-	// int[] CandidateClassID = new int[posMax];
-	//
-	// for (int i = 0; i < posMax; i++) {
-	// CandidateClassID[i] = allClassSimilarity.get(i).classID;
-	// }
-	//
-	// return moveIsPossible(sourceMethod, CandidateClassID);
-	//
-	// }
-	//
-	// return false;
-	//
-	// }
+	private boolean checkPossibleSugestion(MethodJMove sourceMethod,
+			List<ClassAtributes> allClassSimilarity, int posMax) {
+		// TODO Auto-generated method stub
+
+		ClassAtributes classOriginal = new ClassAtributes(
+				sourceMethod.getSourceClassID());
+
+		int MyPosition = allClassSimilarity.indexOf(classOriginal);
+
+		if (MyPosition > posMax) {
+			int[] CandidateClassID = new int[posMax];
+
+			for (int i = 0; i < posMax; i++) {
+				CandidateClassID[i] = allClassSimilarity.get(i).classID;
+			}
+
+			return moveIsPossible(sourceMethod, CandidateClassID);
+
+		}
+
+		return false;
+
+	}
 
 	private boolean moveIsPossible(MethodJMove sourceMethod,
 			int[] CandidateClassID) {
@@ -604,10 +608,10 @@ public class CalculateMediaApproach {
 
 		}
 
-		// if (checkPossibleSugestion(sourceMethod, allClassSimilarity,
-		// POSICAOMAXIMA)) {
-		// contador[indexSUGESTAO]++;
-		// }
+		if (needCalculateAll && checkPossibleSugestion(sourceMethod, allClassSimilarity,
+				POSICAOMAXIMA)) {
+			contador[indexSUGESTAO]++;
+		}
 
 	}
 
