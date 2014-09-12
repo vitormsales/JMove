@@ -59,7 +59,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
-import br.ufmg.dcc.labsoft.java.jmove.principal.ChamaRefine;
+import br.ufmg.dcc.labsoft.java.jmove.principal.Main;
 import br.ufmg.dcc.labsoft.java.jmove.suggestion.Suggestion;
 import br.ufmg.dcc.labsoft.java.jmove.utils.CandidateMap;
 
@@ -665,10 +665,10 @@ public class JMoveView extends ViewPart {
 		// }
 
 		System.out.println("Chamando Refine");
-		ChamaRefine refine = new ChamaRefine();// chamar com o nome do projeto
+		Main jmove = new Main();// chamar com o nome do projeto
 												// #selectedProject
 
-		return refine.execute(selectedProject);
+		return jmove.execute(selectedProject);
 	}
 
 }

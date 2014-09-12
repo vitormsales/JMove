@@ -33,24 +33,25 @@ public class Suggestion {
 
 	public String getMethodSignature() {
 		// TODO Auto-generated method stub
-try {
-		IJavaElement parent = iMethod.getParent();
+		try {
+			IJavaElement parent = iMethod.getParent();
 
-		if (parent instanceof ICompilationUnit) {
-			System.out.println("Icomp yep");
-		}
-		ICompilationUnit unit = iMethod.getCompilationUnit();
-		if(parent.getElementName().equals(unit.getElementName().substring(0,
-						unit.getElementName().length() - 5))){
-			return RefineSignatures.getMethodSignature(
-					ClazzUtil.getUnitClazzName(iMethod.getCompilationUnit()),
-					iMethod);
-		}else
-		
-			return RefineSignatures.getMethodSignature(
-					ClazzUtil.getUnitClazzName(iMethod.getCompilationUnit(), parent.getElementName()),
-					iMethod);
-			
+			if (parent instanceof ICompilationUnit) {
+				System.out.println("Icomp yep");
+			}
+			ICompilationUnit unit = iMethod.getCompilationUnit();
+			if (parent.getElementName().equals(
+					unit.getElementName().substring(0,
+							unit.getElementName().length() - 5))) {
+				return RefineSignatures.getMethodSignature(ClazzUtil
+						.getUnitClazzName(iMethod.getCompilationUnit()),
+						iMethod);
+			} else
+
+				return RefineSignatures.getMethodSignature(ClazzUtil
+						.getUnitClazzName(iMethod.getCompilationUnit(),
+								parent.getElementName()), iMethod);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

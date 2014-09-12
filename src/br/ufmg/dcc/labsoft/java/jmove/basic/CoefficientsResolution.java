@@ -64,14 +64,13 @@ public class CoefficientsResolution {
 		int b = parameters.getQ();
 		int c = parameters.getR();
 		int d = parameters.getS();
-		
+
 		double coefficient = coefficientStrategy.calculate(a, b, c, d);
 		if (Double.isNaN(coefficient))
 			return 0;
 
 		return coefficient;
 	}
-
 
 	private void defineStrategy(CoefficientStrategy strategy) {
 		switch (strategy) {
@@ -174,7 +173,8 @@ public class CoefficientsResolution {
 	public static List<CoefficientStrategy> AllCoefficientStrategy() {
 
 		List<CoefficientStrategy> list = new ArrayList<CoefficientStrategy>();
-		list.add(CoefficientStrategy.Jaccard);
+		list.add(CoefficientStrategy.SokalSneath2);
+		 list.add(CoefficientStrategy.Jaccard);
 		 list.add(CoefficientStrategy.SMC);
 		 list.add(CoefficientStrategy.Yule);
 		 list.add(CoefficientStrategy.Hamann);
@@ -190,7 +190,6 @@ public class CoefficientsResolution {
 		 list.add(CoefficientStrategy.PhiBinary);
 		 list.add(CoefficientStrategy.PSC);
 		 list.add(CoefficientStrategy.RelativeMatching);
-		 list.add(CoefficientStrategy.SokalSneath2);
 		 list.add(CoefficientStrategy.SokalSneath4);
 
 		return list;

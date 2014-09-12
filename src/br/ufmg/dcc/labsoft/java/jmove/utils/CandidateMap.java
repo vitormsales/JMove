@@ -51,28 +51,28 @@ public class CandidateMap {
 	public Object[] getCandidates() {
 
 		suggestions = new ArrayList<Suggestion>();
-		
+
 		IWorkbench wb = PlatformUI.getWorkbench();
 		IProgressService ps = wb.getProgressService();
 		try {
 			ps.busyCursorWhile(new IRunnableWithProgress() {
 				public void run(IProgressMonitor monitor)
-						throws InvocationTargetException,
-						InterruptedException {
-					monitor.beginTask("Checking Move Methods PreConditions for the Suggestions (4/4)",
-							candidatesRefine
-							.entrySet().size());
-					
+						throws InvocationTargetException, InterruptedException {
+					monitor.beginTask(
+							"Checking Move Methods PreConditions for the Suggestions (4/4)",
+							candidatesRefine.entrySet().size());
+
 					Suggestion sug;
 					Iterator<Entry<IMethod, ArrayList<String>>> it = candidatesRefine
 							.entrySet().iterator();
-					
+
 					while (it.hasNext()) {
 						monitor.worked(1);
 						Entry<IMethod, ArrayList<String>> e = it.next();
 
 						IMethod iMethod = (IMethod) (IMethod) e.getKey();
-						ArrayList<String> Candidates = (ArrayList<String>) e.getValue();
+						ArrayList<String> Candidates = (ArrayList<String>) e
+								.getValue();
 						PreConditionsAnalyser analyser = new PreConditionsAnalyser();
 						if (analyser.methodCanBeMoved(iMethod)) {
 							// checar precondicçoes
@@ -80,7 +80,8 @@ public class CandidateMap {
 								ICompilationUnit clazz = Clazz.getInstance()
 										.getICompilation(clazzName);
 
-								if (analyser.satisfiesAllConditions(iMethod, clazz)) {
+								if (analyser.satisfiesAllConditions(iMethod,
+										clazz)) {
 									sug = new Suggestion(iMethod, clazz);
 									suggestions.add(sug);
 									break;
@@ -98,33 +99,63 @@ public class CandidateMap {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 
-
-
-//		while (it.hasNext()) {
-//			Entry<IMethod, ArrayList<String>> e = it.next();
-//
-//			IMethod iMethod = (IMethod) (IMethod) e.getKey();
-//			ArrayList<String> Candidates = (ArrayList<String>) e.getValue();
-//			PreConditionsAnalyser analyser = new PreConditionsAnalyser();
-//			if (analyser.methodCanBeMoved(iMethod)) {
-//				// checar precondicçoes
-//				for (String clazzName : Candidates) {
-//					ICompilationUnit clazz = Clazz.getInstance()
-//							.getICompilation(clazzName);
-//
-//					if (analyser.satisfiesAllConditions(iMethod, clazz)) {
-//						sug = new Suggestion(iMethod, clazz);
-//						suggestions.add(sug);
-//						break;
-//					}
-//				}
-//
-//			}
-//		}
+		// while (it.hasNext()) {
+		// Entry<IMethod, ArrayList<String>> e = it.next();
+		//
+		// IMethod iMethod = (IMethod) (IMethod) e.getKey();
+		// ArrayList<String> Candidates = (ArrayList<String>) e.getValue();
+		// PreConditionsAnalyser analyser = new PreConditionsAnalyser();
+		// if (analyser.methodCanBeMoved(iMethod)) {
+		// // checar precondicçoes
+		// for (String clazzName : Candidates) {
+		// ICompilationUnit clazz = Clazz.getInstance()
+		// .getICompilation(clazzName);
+		//
+		// if (analyser.satisfiesAllConditions(iMethod, clazz)) {
+		// sug = new Suggestion(iMethod, clazz);
+		// suggestions.add(sug);
+		// break;
+		// }
+		// }
+		//
+		// }
+		// }
 
 		return suggestions.toArray();
 	}
 
+	public Object[] getCandidatesWithoutMonitor() {
+
+		suggestions = new ArrayList<Suggestion>();
+
+		Suggestion sug;
+		Iterator<Entry<IMethod, ArrayList<String>>> it = candidatesRefine
+				.entrySet().iterator();
+
+		while (it.hasNext()) {
+
+			Entry<IMethod, ArrayList<String>> e = it.next();
+
+			IMethod iMethod = (IMethod) (IMethod) e.getKey();
+			ArrayList<String> Candidates = (ArrayList<String>) e.getValue();
+			PreConditionsAnalyser analyser = new PreConditionsAnalyser();
+			if (analyser.methodCanBeMoved(iMethod)) {
+				// checar precondicçoes
+				for (String clazzName : Candidates) {
+					ICompilationUnit clazz = Clazz.getInstance()
+							.getICompilation(clazzName);
+
+					if (analyser.satisfiesAllConditions(iMethod, clazz)) {
+						sug = new Suggestion(iMethod, clazz);
+						suggestions.add(sug);
+						break;
+					}
+				}
+
+			}
+		}
+
+		return suggestions.toArray();
+	}
 }

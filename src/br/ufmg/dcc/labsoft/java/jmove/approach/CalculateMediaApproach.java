@@ -9,15 +9,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.dom.DoStatement;
-import org.eclipse.jdt.core.dom.EnhancedForStatement;
-import org.eclipse.jdt.core.dom.ForStatement;
-import org.eclipse.jdt.core.dom.IfStatement;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.SwitchCase;
-import org.eclipse.jdt.core.dom.SwitchStatement;
-import org.eclipse.jdt.core.dom.TryStatement;
-import org.eclipse.jdt.core.dom.WhileStatement;
 
 import br.ufmg.dcc.labsoft.java.jmove.basic.AllEntitiesMapping;
 import br.ufmg.dcc.labsoft.java.jmove.basic.CoefficientsResolution;
@@ -27,7 +18,6 @@ import br.ufmg.dcc.labsoft.java.jmove.methods.AllMethods;
 import br.ufmg.dcc.labsoft.java.jmove.methods.MethodJMove;
 import br.ufmg.dcc.labsoft.java.jmove.methods.StatisticsMethod2Method;
 import br.ufmg.dcc.labsoft.java.jmove.utils.CandidateMap;
-import br.ufmg.dcc.labsoft.java.jmove.utils.MoveMethod;
 import br.ufmg.dcc.labsoft.java.jmove.utils.PrintOutput;
 
 /**
@@ -167,6 +157,7 @@ public class CalculateMediaApproach {
 				e.printStackTrace();
 			}
 		}
+
 		IMethod im = null;
 		for (int i = 0; i < allMethods.getAllMethodsList().size(); i++) {
 
@@ -175,76 +166,16 @@ public class CalculateMediaApproach {
 
 			// #### tira metodos pequenos
 			if (sourceMethod.getMethodsDependencies().size() < MINIMUM_DEPEDENCIES_SIZE) {
-
-				String nameMethod = AllEntitiesMapping.getInstance().getByID(
-						sourceMethod.getNameID());
-
-				im = allMethods.getIMethod(sourceMethod);
-
-				String name[] = nameMethod.split("::");
-
-				try {
-					if (sourceMethod.getMethodsDependencies().size() == 3) {
-						if (im != null && !im.isConstructor()
-								&& !im.isMainMethod() && im.isResolved()) {
-							if (name[1].startsWith("get")
-									|| name[1].startsWith("set")) {
-								contaGetters++;
-							}
-
-							if ((name[1].startsWith("get") || name[1]
-									.startsWith("set"))
-									&& sourceMethod.getMethodsDependencies()
-											.size() == 0) {
-								contZero++;
-							}
-							contaMethods++;
-							PrintOutput.write(nameMethod
-									+ " size dep "
-									+ sourceMethod.getMethodsDependencies()
-											.size() + "\n", menor3dep);
-
-							PrintOutput.write(name[1] + "\n", "menor3dep2");
-							PrintOutput.write(name[0] + "\n", "menor3dep3");
-
-							// for (Integer chaves : sourceMethod
-							// .getMethodsDependencies()) {
-							// PrintOutput.write(AllEntitiesMapping.getInstance()
-							// .getByID(chaves) + "\n", menor3dep);
-							// }
-						}
-					}
-				} catch (JavaModelException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				PrintOutput.write("\n \n", menor3dep);
-
 				continue;
 
 			}
-
-			// if (sourceMethod.getMethodsDependencies().size() == 3) {
-			// if (hasOnlyOne(MethodObjects.getInstance()
-			// .getMethodDeclaration(im))) {
-			// System.out.println("only one " + im.getElementName());
-			// PrintOutput.write("only one " + im.getElementName() +" \n",
-			// "apenas1");
-			// continue;
-			// }
-			//
-			// }
-			// #### end
-
+			
 			// #########begin conta somente aqueles que algum move é possivel
-
 			int source = sourceMethod.getNameID();
 			if (!allMethods.getMoveIspossible().contains(source)) {
 				continue;
 
 			}
-
 			// ########end;
 
 			allClassSimilarity.clear();
@@ -274,8 +205,6 @@ public class CalculateMediaApproach {
 					}
 
 					atributes.numberOfMethods++;
-					// pair.setFirst(sourceMethod);
-					// pair.setSecond(targetMethod);
 
 					Parameters parameters = stats.calculateParameters(
 							sourceMethod, targetMethod);
@@ -283,8 +212,6 @@ public class CalculateMediaApproach {
 					atributes.similarityIndice += resolution.calculate(
 							parameters, strategy);
 
-					// atributes.similarityIndice += resolution.calculate(
-					// allParameters.get(pair), strategy);
 				}
 
 			}
@@ -338,10 +265,20 @@ public class CalculateMediaApproach {
 			PrintOutput.finish(indicationAdress);
 
 			PrintOutput.finish(menor3dep);
+			
+			return candidateMap;
+			
+		}else{
+			Object[] candidates = candidateMap.getCandidatesWithoutMonitor();
+			
+			for (Object object : candidates) {
+				System.out.println(object);
+			}
+			
+			
+			return null;
 		}
-		System.out.println("candidate map final  " + candidateMap);
-		return candidateMap;
-
+	
 	}
 
 	private void normalize(List<ClassAtributes> allClassSimilarity) {
@@ -365,102 +302,6 @@ public class CalculateMediaApproach {
 			allClassSimilarity.get(i).similarityIndice /= bigger;
 		}
 
-	}
-
-	private boolean checkPossibleSugestion(MethodJMove sourceMethod,
-			List<ClassAtributes> allClassSimilarity, int posMax) {
-		// TODO Auto-generated method stub
-
-		ClassAtributes classOriginal = new ClassAtributes(
-				sourceMethod.getSourceClassID());
-
-		int MyPosition = allClassSimilarity.indexOf(classOriginal);
-
-		if (MyPosition > posMax) {
-			int[] CandidateClassID = new int[posMax];
-
-			for (int i = 0; i < posMax; i++) {
-				CandidateClassID[i] = allClassSimilarity.get(i).classID;
-			}
-
-			return moveIsPossible(sourceMethod, CandidateClassID);
-
-		}
-
-		return false;
-
-	}
-
-	private boolean moveIsPossible(MethodJMove sourceMethod,
-			int[] CandidateClassID) {
-
-		List<String> possiblesCandidateList = MoveMethod
-				.getpossibleRefactoring(allMethods.getIMethod(sourceMethod));
-
-		if (possiblesCandidateList.size() > 0) {
-			// System.out.println("METODO " + sourceMethod);
-			for (int idCandidates : CandidateClassID) {
-				// System.out.println("posso mover para " + idCandidates
-				// + " idCandidates");
-				for (String possibleCandidates : possiblesCandidateList) {
-
-					Integer valor = AllEntitiesMapping.getInstance().getByName(
-							possibleCandidates);
-
-					// System.out.println("CANDIDATO atual" + possibleCandidates
-					// + "id " + valor);
-
-					int classPossibleID;
-
-					if (valor != null) {
-						classPossibleID = valor;
-					} else {
-						classPossibleID = treatyClassNameID(possibleCandidates);
-					}
-
-					// System.out.println("CANDIDATO valor tratado " +
-					// possibleCandidates
-					// + "id " + valor);
-
-					if (idCandidates == classPossibleID) {
-
-						PrintOutput.write(" Mover " + sourceMethod
-								+ " para classe " + possibleCandidates + "\n",
-								sugestionAdress);
-
-						// System.out.println("SUGESTAO   Mover " + sourceMethod
-						// + " para classe " + possibleCandidates + "\n");
-
-						return true;
-					}
-				}
-			}
-
-			System.out.println();
-
-		}
-		return false;
-	}
-
-	private int treatyClassNameID(String possibleCandidates) {
-		// TODO Auto-generated method stub
-
-		int indexBegin = possibleCandidates.indexOf('<');
-
-		if (indexBegin > 0) {
-			String treatyName = possibleCandidates.substring(0, indexBegin);
-			return AllEntitiesMapping.getInstance().getByName(treatyName);
-
-		}
-
-		indexBegin = possibleCandidates.indexOf('[');
-		if (indexBegin > 0) {
-			String treatyName = possibleCandidates.substring(0, indexBegin);
-			return AllEntitiesMapping.getInstance().getByName(treatyName);
-
-		}
-
-		return -1;
 	}
 
 	private void writeExcelFormat(int[] contador, CoefficientStrategy strategy) {
@@ -500,73 +341,6 @@ public class CalculateMediaApproach {
 
 	}
 
-	// private void blindAnalisysBinary(List<ClassAtributes> allClassSimilarity,
-	// Method sourceMethod, int[] contador) {
-	// // TODO Auto-generated method stub
-	//
-	// ClassAtributes classOriginal = new ClassAtributes(
-	// sourceMethod.getSourceClassID());
-	//
-	// final int POSICAOMAXIMA = 3;
-	// final double PORCENTAGEM = 0.03;
-	// final double MAXIMAPORCENTAGEM = 0.10;
-	//
-	// int classOriginalIndex = allClassSimilarity.indexOf(classOriginal);
-	// int index = 0;
-	// double firstOfAll = allClassSimilarity.get(index).similarityIndice;
-	// double first = 1;
-	// double next = 1;
-	//
-	// if (classOriginalIndex < 0) {
-	// System.out.println("Nao aplicavel");
-	// return;
-	// }
-	//
-	// while (((first - next) / first) < PORCENTAGEM || index <= POSICAOMAXIMA)
-	// {
-	//
-	// ClassAtributes classAtributesFirst = allClassSimilarity.get(index);
-	// first = classAtributesFirst.similarityIndice;
-	// // System.out.println("First " + first);
-	// index++;
-	//
-	// if (index > allClassSimilarity.size()) {
-	// index++;
-	// // System.out.println(classOriginalIndex);
-	// break;
-	// }
-	//
-	// ClassAtributes classAtributesSecond = allClassSimilarity.get(index);
-	// next = classAtributesSecond.similarityIndice;
-	// // System.out.println("next " + next);
-	//
-	// if (classOriginalIndex < index) {
-	// // System.out.println("Paraou no break pos " + index);
-	// break;
-	// }
-	//
-	// if ((firstOfAll - next) / firstOfAll > MAXIMAPORCENTAGEM
-	// && index >= POSICAOMAXIMA) {
-	// // System.out.println("Paraou no MAXIMAPORCENTAGEM pos " +
-	// // index);
-	// break;
-	// }
-	//
-	// }
-	// // System.out.println("classOriginalIndex " + classOriginalIndex);
-	// // System.out.println("index " + index);
-	// if (classOriginalIndex < index) {
-	// contador[indexCORRETA]++;
-	// } else {
-	// contador[indexERRADO]++;
-	// }
-	// // System.out.println();
-	// if (checkPossibleSugestion(sourceMethod, allClassSimilarity, index)) {
-	// contador[indexSUGESTAO]++;
-	// }
-	//
-	// }
-
 	private void blindAnalisys(List<ClassAtributes> allClassSimilarity,
 			MethodJMove sourceMethod, int[] contador) {
 		// TODO Auto-generated method stub
@@ -576,96 +350,41 @@ public class CalculateMediaApproach {
 
 		IMethod iMethod = allMethods.getIMethod(sourceMethod);
 
-		int indexOf = allClassSimilarity.indexOf(classOriginal);
+		int myPosition = allClassSimilarity.indexOf(classOriginal);
 
 		// considera as três primeirsas posições no ranking
 		final int POSICAOMAXIMA = 2;
 		final double VALORALTO = 0.75;
 
-		if (indexOf > POSICAOMAXIMA) {
+		if (myPosition > POSICAOMAXIMA) {
 			contador[indexERRADO]++;
 
-			for (int i = 0; i < indexOf; i++) {
+			for (int i = 0; i < myPosition; i++) {
 				ClassAtributes classAtributes = allClassSimilarity.get(i);
 				String candidate = AllEntitiesMapping.getInstance().getByID(
 						classAtributes.classID);
 				candidateMap.putCandidateOnList(iMethod, candidate);
+
 			}
 
 		} else {
 			contador[indexCORRETA]++;
 
-			for (int i = 0; i < indexOf; i++) {
+			for (int i = 0; i < myPosition; i++) {
 				ClassAtributes classAtributes = allClassSimilarity.get(i);
 				ClassAtributes classAtributesSource = allClassSimilarity
-						.get(indexOf);
+						.get(myPosition);
+				
 				if (classAtributesSource.similarityIndice < VALORALTO) {
 					String candidate = AllEntitiesMapping.getInstance()
 							.getByID(classAtributes.classID);
 					candidateMap.putCandidateOnList(iMethod, candidate);
-				}
-			}
-
-		}
-
-		if (needCalculateAll && checkPossibleSugestion(sourceMethod, allClassSimilarity,
-				POSICAOMAXIMA)) {
-			contador[indexSUGESTAO]++;
-		}
-
-	}
-
-	private boolean hasOnlyOne(MethodDeclaration md) {
-
-		List<?> statList = null;
-
-		if (md.getBody() != null) {
-
-			statList = md.getBody().statements();
-			if (statList == null || statList.size() == 0) {
-				// PrintOutput
-				// .write(ClazzUtil.getUnitClazzName(iMethod
-				// .getCompilationUnit())
-				// + "."
-				// + iMethod.getElementName()
-				// + " "
-				// + "pequeno na sentença\n", "size");
-				return true;
-			}
-
-			if (statList.size() < 2) {
-				for (Object st : statList) {
-
-					if (st instanceof ForStatement) {
-						return false;
-					} else if (st instanceof IfStatement) {
-						return false;
-					} else if (st instanceof SwitchCase) {
-						return false;
-					} else if (st instanceof SwitchStatement) {
-						return false;
-					} else if (st instanceof TryStatement) {
-						return false;
-					} else if (st instanceof WhileStatement) {
-						return false;
-					} else if (st instanceof DoStatement) {
-						return false;
-					} else if (st instanceof EnhancedForStatement) {
-						return false;
-					}
-					// PrintOutput.write(
-					// ClazzUtil.getUnitClazzName(iMethod
-					// .getCompilationUnit())
-					// + "."
-					// + iMethod.getElementName()
-					// + " "
-					// + "pequeno na sentença sem if\n", "size");
 
 				}
-				return true;
 			}
+
 		}
-		return false;
+
 	}
 
 	private void writeTraceIndications(MethodJMove sourceMethod,

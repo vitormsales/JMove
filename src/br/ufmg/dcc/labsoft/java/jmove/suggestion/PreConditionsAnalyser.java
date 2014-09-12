@@ -7,25 +7,15 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.dom.DoStatement;
-import org.eclipse.jdt.core.dom.EnhancedForStatement;
-import org.eclipse.jdt.core.dom.ForStatement;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
-import org.eclipse.jdt.core.dom.IfStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.SwitchCase;
-import org.eclipse.jdt.core.dom.SwitchStatement;
-import org.eclipse.jdt.core.dom.TryStatement;
-import org.eclipse.jdt.core.dom.WhileStatement;
 
 import br.ufmg.dcc.labsoft.java.jmove.methods.MethodObjects;
 import br.ufmg.dcc.labsoft.java.jmove.utils.ClazzUtil;
 import br.ufmg.dcc.labsoft.java.jmove.utils.MoveMethod;
-import br.ufmg.dcc.labsoft.java.jmove.utils.PrintOutput;
 
 public class PreConditionsAnalyser {
 
@@ -154,61 +144,4 @@ public class PreConditionsAnalyser {
 		return false;
 	}
 
-//	private boolean notHasOnlyOne(MethodDeclaration md) {
-//
-//		List<?> statList = null;
-//
-//		IJavaElement javaElementA = md.resolveBinding().getJavaElement();
-//		IMethod iMethod = null;
-//		if (javaElementA instanceof IMethod) {
-//			iMethod = (IMethod) javaElementA;
-//		}
-//
-//		if (md.getBody() != null) {
-//
-//			statList = md.getBody().statements();
-//			if (statList == null || statList.size() == 0) {
-//				PrintOutput
-//						.write(ClazzUtil.getUnitClazzName(iMethod
-//								.getCompilationUnit())
-//								+ "."
-//								+ iMethod.getElementName()
-//								+ " "
-//								+ "pequeno na sentença\n", "size");
-//				return false;
-//			}
-//
-//			if (statList.size() < 2) {
-//				for (Object st : statList) {
-//
-//					if (st instanceof ForStatement) {
-//						return true;
-//					} else if (st instanceof IfStatement) {
-//						return true;
-//					} else if (st instanceof SwitchCase) {
-//						return true;
-//					} else if (st instanceof SwitchStatement) {
-//						return true;
-//					} else if (st instanceof TryStatement) {
-//						return true;
-//					} else if (st instanceof WhileStatement) {
-//						return true;
-//					} else if (st instanceof DoStatement) {
-//						return true;
-//					} else if (st instanceof EnhancedForStatement) {
-//						return true;
-//					}
-//					PrintOutput.write(
-//							ClazzUtil.getUnitClazzName(iMethod
-//									.getCompilationUnit())
-//									+ "."
-//									+ iMethod.getElementName()
-//									+ " "
-//									+ "pequeno na sentença sem if\n", "size");
-//					return false;
-//				}
-//			}
-//		}
-//		return true;
-//	}
 }
