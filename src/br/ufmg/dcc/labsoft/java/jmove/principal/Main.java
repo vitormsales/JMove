@@ -130,9 +130,9 @@ public class Main {
 							allMethods, activeProjectName, numberOfClass,
 							monitor);
 					
-					map = mediaApproach
-							.calculate(CoefficientStrategy.SokalSneath2);
-					
+//					map = mediaApproach
+//							.calculate(CoefficientStrategy.SokalSneath2);
+//					
 					mediaApproach.calculateForAllStrategies();
 
 				}

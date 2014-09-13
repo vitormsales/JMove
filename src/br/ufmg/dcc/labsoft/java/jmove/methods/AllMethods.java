@@ -40,7 +40,7 @@ import br.ufmg.dcc.labsoft.java.jmove.util.DCLUtil;
 import br.ufmg.dcc.labsoft.java.jmove.utils.ClazzUtil;
 import br.ufmg.dcc.labsoft.java.jmove.utils.MoveMethod;
 import br.ufmg.dcc.labsoft.java.jmove.utils.PrintOutput;
-import br.ufmg.dcc.labsoft.java.jmove.utils.RefineSignatures;
+import br.ufmg.dcc.labsoft.java.jmove.utils.JMoveSignatures;
 
 public class AllMethods {
 
@@ -95,9 +95,9 @@ public class AllMethods {
 					String sourceClass = dep.getClassNameA();
 					String dependecyClass = dep.getClassNameB();
 
-					String methodA = RefineSignatures.getMethodSignature(
+					String methodA = JMoveSignatures.getMethodSignature(
 							dep.getClassNameA(), acDependency.getImethodA());
-					String methodB = RefineSignatures.getMethodSignature(
+					String methodB = JMoveSignatures.getMethodSignature(
 							dep.getClassNameB(), acDependency.getImethodB());
 
 					// String methodB = dep.getClassNameB() + "."
@@ -127,11 +127,11 @@ public class AllMethods {
 
 					AccessFieldDependency acFieldDependency = (AccessFieldDependency) dep;
 
-					String methodA = RefineSignatures.getMethodSignature(
+					String methodA = JMoveSignatures.getMethodSignature(
 							dep.getClassNameA(),
 							acFieldDependency.getImethodA());
 
-					String field = RefineSignatures.getFieldSignature(
+					String field = JMoveSignatures.getFieldSignature(
 							dep.getClassNameB(),
 							acFieldDependency.getiVariableBinding());
 
@@ -170,10 +170,10 @@ public class AllMethods {
 					// String field = dep.getClassNameB() + "."
 					// + ((SimpleNameDependency) dep).getVariableName();
 
-					String methodA = RefineSignatures.getMethodSignature(
+					String methodA = JMoveSignatures.getMethodSignature(
 							dep.getClassNameA(), snDependency.getImethodA());
 
-					String field = RefineSignatures.getFieldSignature(
+					String field = JMoveSignatures.getFieldSignature(
 							dep.getClassNameB(),
 							snDependency.getiVariableBinding());
 
@@ -198,7 +198,7 @@ public class AllMethods {
 					// + ((AnnotateMethodDependency) dep).getMethodName()
 					// + "()";
 
-					String methodA = RefineSignatures.getMethodSignature(
+					String methodA = JMoveSignatures.getMethodSignature(
 							dep.getClassNameA(), anDependency.getImethodA());
 
 					List<String> dependeciesList = new ArrayList<String>();
@@ -218,7 +218,7 @@ public class AllMethods {
 					String sourceClass = dep.getClassNameA();
 					String dependecyClass = dep.getClassNameB();
 
-					String methodA = RefineSignatures.getMethodSignature(
+					String methodA = JMoveSignatures.getMethodSignature(
 							dep.getClassNameA(), cmDependency.getImethodA());
 
 					// String method = dep.getClassNameA() + "."
@@ -244,7 +244,7 @@ public class AllMethods {
 					// + ((DeclareParameterDependency) dep)
 					// .getMethodName() + "()";
 
-					String methodA = RefineSignatures.getMethodSignature(
+					String methodA = JMoveSignatures.getMethodSignature(
 							dep.getClassNameA(), dpDependency.getImethodA());
 
 					String sourceClass = dep.getClassNameA();
@@ -267,7 +267,7 @@ public class AllMethods {
 
 					DeclareReturnDependency drDependency = (DeclareReturnDependency) dep;
 
-					String methodA = RefineSignatures.getMethodSignature(
+					String methodA = JMoveSignatures.getMethodSignature(
 							dep.getClassNameA(), drDependency.getImethodA());
 
 					String sourceClass = dep.getClassNameA();
@@ -290,7 +290,7 @@ public class AllMethods {
 
 					DeclareLocalVariableDependency dlvDependency = (DeclareLocalVariableDependency) dep;
 
-					String methodA = RefineSignatures.getMethodSignature(
+					String methodA = JMoveSignatures.getMethodSignature(
 							dep.getClassNameA(), dlvDependency.getImethodA());
 
 					// String method = dep.getClassNameA()
@@ -324,7 +324,7 @@ public class AllMethods {
 
 					ThrowDependency throwDependency = (ThrowDependency) dep;
 
-					String methodA = RefineSignatures.getMethodSignature(
+					String methodA = JMoveSignatures.getMethodSignature(
 							dep.getClassNameA(), throwDependency.getImethodA());
 
 					String sourceClass = dep.getClassNameA();

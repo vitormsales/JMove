@@ -18,7 +18,7 @@ import org.eclipse.jface.text.Position;
 import br.ufmg.dcc.labsoft.java.jmove.methods.CompilationUnitCacheJmove;
 import br.ufmg.dcc.labsoft.java.jmove.methods.MethodObjects;
 import br.ufmg.dcc.labsoft.java.jmove.utils.ClazzUtil;
-import br.ufmg.dcc.labsoft.java.jmove.utils.RefineSignatures;
+import br.ufmg.dcc.labsoft.java.jmove.utils.JMoveSignatures;
 
 public class Suggestion {
 
@@ -43,12 +43,12 @@ public class Suggestion {
 			if (parent.getElementName().equals(
 					unit.getElementName().substring(0,
 							unit.getElementName().length() - 5))) {
-				return RefineSignatures.getMethodSignature(ClazzUtil
+				return JMoveSignatures.getMethodSignature(ClazzUtil
 						.getUnitClazzName(iMethod.getCompilationUnit()),
 						iMethod);
 			} else
 
-				return RefineSignatures.getMethodSignature(ClazzUtil
+				return JMoveSignatures.getMethodSignature(ClazzUtil
 						.getUnitClazzName(iMethod.getCompilationUnit(),
 								parent.getElementName()), iMethod);
 
@@ -143,5 +143,11 @@ public class Suggestion {
 	public String getMethodName() {
 		// TODO Auto-generated method stub
 		return iMethod.getElementName();
+	}
+	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Move "+ this.getMethodSignature() +" to "+ ClazzUtil.getUnitClazzName(clazz);
 	}
 }

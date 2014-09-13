@@ -17,6 +17,7 @@ import br.ufmg.dcc.labsoft.java.jmove.basic.Parameters;
 import br.ufmg.dcc.labsoft.java.jmove.methods.AllMethods;
 import br.ufmg.dcc.labsoft.java.jmove.methods.MethodJMove;
 import br.ufmg.dcc.labsoft.java.jmove.methods.StatisticsMethod2Method;
+import br.ufmg.dcc.labsoft.java.jmove.suggestion.Suggestion;
 import br.ufmg.dcc.labsoft.java.jmove.utils.CandidateMap;
 import br.ufmg.dcc.labsoft.java.jmove.utils.PrintOutput;
 
@@ -120,9 +121,7 @@ public class CalculateMediaApproach {
 		PrintOutput.write("\n " + strategy + "\nMetodos com menos que "
 				+ allMethods.getNumberOfExcluded()
 				+ " dependencias excluidos\n", blindAdress);
-		PrintOutput.write("\n " + strategy + "\nMetodos com menos que "
-				+ allMethods.getNumberOfExcluded()
-				+ " dependencias excluidos\n", sugestionAdress);
+		PrintOutput.write("\n " + strategy + "\n", sugestionAdress);
 		PrintOutput.write("\n " + strategy + "\nMetodos com menos que "
 				+ allMethods.getNumberOfExcluded()
 				+ " dependencias excluidos\n", indicationAdress);
@@ -169,7 +168,7 @@ public class CalculateMediaApproach {
 				continue;
 
 			}
-			
+
 			// #########begin conta somente aqueles que algum move é possivel
 			int source = sourceMethod.getNameID();
 			if (!allMethods.getMoveIspossible().contains(source)) {
@@ -241,9 +240,6 @@ public class CalculateMediaApproach {
 			}
 		}
 
-		PrintOutput.write(" Numero de sugestoes " + contador[indexSUGESTAO]
-				+ " \n", sugestionAdress);
-
 		writeStatisticsBlind(contador);
 		writeExcelFormat(contador, strategy);
 
@@ -265,20 +261,24 @@ public class CalculateMediaApproach {
 			PrintOutput.finish(indicationAdress);
 
 			PrintOutput.finish(menor3dep);
-			
+
 			return candidateMap;
-			
-		}else{
+
+		} else {
 			Object[] candidates = candidateMap.getCandidatesWithoutMonitor();
-			
+
 			for (Object object : candidates) {
-				System.out.println(object);
+				System.out.println();
+				PrintOutput.write("\n " + (Suggestion) object, sugestionAdress);
+				contador[indexSUGESTAO]++;
 			}
-			
-			
+
+			PrintOutput.write("\n Numero de sugestoes " + contador[indexSUGESTAO]
+					+ " \n", sugestionAdress);
+
 			return null;
 		}
-	
+
 	}
 
 	private void normalize(List<ClassAtributes> allClassSimilarity) {
@@ -374,7 +374,7 @@ public class CalculateMediaApproach {
 				ClassAtributes classAtributes = allClassSimilarity.get(i);
 				ClassAtributes classAtributesSource = allClassSimilarity
 						.get(myPosition);
-				
+
 				if (classAtributesSource.similarityIndice < VALORALTO) {
 					String candidate = AllEntitiesMapping.getInstance()
 							.getByID(classAtributes.classID);

@@ -5,7 +5,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 
-public class RefineSignatures {
+public class JMoveSignatures {
 	public static String getFieldSignature(String classNameA,
 			IVariableBinding iVariableBinding) throws JavaModelException {
 		// TODO Auto-generated method stub
