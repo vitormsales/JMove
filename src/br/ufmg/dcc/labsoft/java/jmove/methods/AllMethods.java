@@ -387,7 +387,7 @@ public class AllMethods {
 	private void createMethod(String methodName, String sourceClass,
 			List<String> dependeciesList, IMethod iMethod) {
 		// TODO Auto-generated method stub
-		
+
 		int methodId = AllEntitiesMapping.getInstance().createEntityID(
 				methodName);
 
@@ -406,7 +406,9 @@ public class AllMethods {
 
 			// List<String> moveReachable = MoveMethod
 			// .getpossibleRefactoring(getIMethod(method2));
-			if (MoveMethod.IsRefactoringPossible(getIMethod(method2))) {
+			if (this.getIMethod(method2) != null
+					&& MoveMethod.IsRefactoringPossible(this
+							.getIMethod(method2))) {
 				moveIspossible.add(methodId);
 			}
 
@@ -416,8 +418,6 @@ public class AllMethods {
 		}
 
 	}
-
-	
 
 	private void putIMethodInMapping(String methodName, IMethod iMethod) {
 		// TODO Auto-generated method stub

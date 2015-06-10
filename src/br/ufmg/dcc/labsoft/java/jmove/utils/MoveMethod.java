@@ -221,9 +221,7 @@ public class MoveMethod {
 				}
 			}
 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {;
 			return false;
 		}
 		return false;
